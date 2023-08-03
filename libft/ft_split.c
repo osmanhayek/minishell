@@ -3,123 +3,117 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
+/*   By: baer <baer@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/29 22:36:34 by ohayek            #+#    #+#             */
-/*   Updated: 2023/06/29 22:36:34 by ohayek           ###   ########.fr       */
+/*   Created: 2023/07/03 16:03:39 by baer              #+#    #+#             */
+/*   Updated: 2023/08/03 17:09:27 by baer             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"libft.h"
+#include <stdlib.h>
+#include <stdio.h>
 
-static inline
-char	**ft_deallocate(char **result, size_t i)
+static int	ft_ifin(char *str, char c)
 {
-	size_t	j;
-
-	j = 0;
-	while (j < i)
-		free(result[j++]);
-	free(result);
-	return (NULL);
-}
-
-static inline
-char	*ft_sub(char const *s, size_t start, size_t len)
-{
-	size_t	i;
-	size_t	j;
-	char	*str;
-
-	str = (char *)malloc(sizeof(char) * (len - start) + 1);
-	if (!str)
-		return (NULL);
-	i = start;
-	j = 0;
-	while (j < (len - start))
+	while (*str)
 	{
-		str[j] = s[i];
-		i++;
-		j++;
+		if (*str == c)
+			return (1);
+		str++;
 	}
-	str[j] = '\0';
-	return (str);
+	return (0);
 }
 
-static inline
-char	*ft_get_word(const char *str, char c, int word)
+static	char	*move(char *prevnext, char *c)
 {
-	static size_t	i = 0;
-	static size_t	j = 0;
-	char			*result;
+	prevnext++;
+	while (!ft_ifin(c, *prevnext) && *prevnext != '\0')
+		prevnext++;
+	return (prevnext);
+}
 
-	while (str[i] && str[i] == c)
-		i++;
-	j = i;
-	while (str[i])
+static	char	*pass(char *prevnext, char *c)
+{
+	while (ft_ifin(c, *prevnext) && *prevnext != '\0')
+		prevnext++;
+	return (prevnext);
+}
+
+static	int	count_split(char *act, char *c)
+{
+	int	count;
+	int	check;
+
+	count = 0;
+	check = 0;
+	while (1)
 	{
-		if (str[i] == c)
+		act = pass(act, c);
+		if (!(*act))
+			break ;
+		else
+			count++;
+		if (*act == '"' || *act == '\'')
 		{
-			result = ft_sub(str, j, i);
-			if (word == 0)
-				i = 0;
-			return (result);
+			act++;
+			while (*act != '"' && *act != '\'' && *(act + 1))
+				act++;
+			act++;
 		}
-		i++;
+		else
+			act = move(act, c);
 	}
-	result = ft_sub(str, j, i);
-	i = 0;
-	return (result);
+	return (count + 1);
 }
 
-static inline
-int	ft_count(const char *str, char c)
+static	char	*ft_strndup(char *prev, char *next)
 {
-	size_t	num_of_words;
-	size_t	i;
+	char	*arr;
+	char	*temp;
 
-	if (!str[0])
+	arr = (char *)malloc(sizeof(char) * (next - prev + 1));
+	temp = arr;
+	while (prev < next)
+		*arr++ = *prev++;
+	*arr = '\0';
+	return (temp);
+}
+
+char	*ft_skipnext(char *next, char *c)
+{
+	if (*next == '"' || *next == '\'')
+	{
+		next++;
+		while (*next != '"' && *next != '\'' && *(next + 1))
+			next++;
+		next++;
+	}
+	else
+		next = move(next, c);
+	return (next);
+}
+
+char	**ft_split(const char *s, char *c)
+{
+	char	**arr;
+	char	*next;
+	char	*prev;
+	int		i;
+
+	arr = (char **)malloc(sizeof(char *) * count_split((char *)s, c));
+	if (!arr)
 		return (0);
-	num_of_words = 0;
+	arr[count_split((char *)s, c) - 1] = NULL;
 	i = 0;
-	while (str[i] && str[i] == c)
-		i++;
-	while (str[i])
+	next = pass((char *)s, c);
+	prev = next;
+	while (i < count_split((char *)s, c) - 1)
 	{
-		if (str[i] == c)
-		{
-			num_of_words++;
-			while (str[i] && str[i] == c)
-				i++;
-			continue ;
-		}
-		i++;
+		next = ft_skipnext(next, c);
+		arr[i++] = ft_strndup(prev, next);
+		next = pass(next, c);
+		prev = next - 1;
+		prev++;
 	}
-	if (str[i - 1] != c)
-		num_of_words++;
-	return (num_of_words);
-}
-
-char	**ft_split(const char *str, char c)
-{
-	char	**result;
-	int		num_of_words;
-	size_t	i;
-
-	if (!str)
-		return (NULL);
-	num_of_words = ft_count(str, c);
-	result = (char **)malloc(sizeof(char *) * (num_of_words + 1));
-	if (!result)
-		return (NULL);
-	i = 0;
-	while (num_of_words--)
-	{
-		result[i] = ft_get_word(str, c, num_of_words);
-		if (!result[i])
-			return (ft_deallocate(result, i));
-		i++;
-	}
-	result[i] = NULL;
-	return (result);
+	return (arr);
 }

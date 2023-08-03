@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 18:52:25 by ohayek            #+#    #+#             */
-/*   Updated: 2023/08/02 02:15:30 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/03 18:45:58 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	display(t_global *mini)
 	temp = mini->head;
 	while (temp)
 	{
-		printf("%d %s %d\n", temp->i, temp->str, temp->token);
+		printf("%d %s %d %d \n", temp->i, temp->str, temp->token, temp->is_quote);
 		temp = temp->next;
 	}
 }
@@ -37,6 +37,13 @@ int	main(int ac, char **av, char **ev)
 		if (line == NULL)
 			exit(1);
 		ft_init_lexer(&mini, line);
+		if (ft_check_error(&mini))
+		{
+			ft_deallocate_lexer(&mini);
+			free(line);
+			continue ;
+		}
+		display(&mini);
 		free(line);
 	}
 }

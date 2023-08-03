@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 19:05:28 by ohayek            #+#    #+#             */
-/*   Updated: 2023/08/01 23:06:13 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/03 19:25:15 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,12 @@ void	ft_first_node(t_global *mini, char *str)
 		mini->head->token = ft_find_token(str);
 	mini->head->str = ft_strdup(str);
 	mini->head->i = 0;
+	if (str[0] == '"')
+		mini->head->is_quote = 2;
+	else if (str[0] == '\'')
+		mini->head->is_quote = 1;
+	else
+		mini->head->is_quote = 0;
 }
 
 void	ft_last_node(t_global *mini, char *str)
@@ -59,6 +65,12 @@ void	ft_last_node(t_global *mini, char *str)
 	new->prev = temp;
 	temp->next = new;
 	new->i = new->prev->i + 1;
+	if (str[0] == '"')
+		new->is_quote = 2;
+	else if (str[0] == '\'')
+		new->is_quote = 1;
+	else
+		new->is_quote = 0;
 }
 
 void	ft_push_back(t_global *mini, char *str)
@@ -78,7 +90,7 @@ void	ft_init_lexer(t_global *mini, char *line)
 	int		i;
 	int		j;
 
-	lexers = ft_split(line, ' ');
+	lexers = ft_split(line, "\t ");
 	if (!lexers)
 		return ;
 	i = 0;
