@@ -6,11 +6,13 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 22:46:05 by ohayek            #+#    #+#             */
-/*   Updated: 2023/08/06 01:22:45 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/06 14:48:47 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int exit_status = 127;
 
 
 int ft_is_valid(char c)
@@ -47,6 +49,27 @@ int ft_expand_count(char *line, char **ev)
     return (0);
 }
 
+int ft_num(int num)
+{
+    int     size;
+    long    nbr;
+    size = 0;
+    if (!num)
+        return (1);
+    nbr = num;
+    if (nbr < 0)
+    {
+        size++;
+        nbr = -nbr;
+    }
+    while (nbr)
+    {
+        size++;
+        nbr = nbr / 10;
+    }
+    return (size);
+}
+
 int ft_count(char *line, char **ev)
 {
     int i;
@@ -59,7 +82,7 @@ int ft_count(char *line, char **ev)
     {
         if (line[i] == '$')
         {
-            if (!ft_is_valid(line[i + 1]))
+            if (!ft_is_valid(line[i + 1]) && line[i + 1] != '?')
             {
                 while (line[i] && line[++i] != '$')
                 {
@@ -71,6 +94,12 @@ int ft_count(char *line, char **ev)
             }
             else
             {
+                if (line[i + 1] == '?')
+                {
+                    i += 2;
+                    size += ft_num(exit_status);
+                    continue ;
+                }
                 j = ++i;
                 while ((ft_is_valid(line[i]) || ft_isalnum(line[i])) && line[i])
                     i++;
@@ -134,7 +163,7 @@ char    *ft_expand(char *line, char **ev)
     {
         if (line[i] == '$')
         {
-            if (!ft_is_valid(line[i + 1]))
+            if (!ft_is_valid(line[i + 1]) && line[i + 1] != '?')
             {
                 while (line[i] && line[++i] != '$')
                     expanded_str[x++] = line[i - 1];
@@ -144,6 +173,16 @@ char    *ft_expand(char *line, char **ev)
             }
             else
             {
+                if (line[i + 1] == '?')
+                {
+                    i += 2;
+                    char    *num = ft_itoa(exit_status);
+                    int c;
+                    c = 0;
+                    while (num[c])
+                        expanded_str[x++] = num[c++];
+                    continue ;
+                }
                 j = ++i;
                 while ((ft_is_valid(line[i]) || ft_isalnum(line[i])) && line[i])
                     i++;
