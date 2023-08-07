@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 16:15:04 by ohayek            #+#    #+#             */
-/*   Updated: 2023/08/03 18:45:33 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/06 17:31:48 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	ft_check_pipe(t_global *mini)
 			g_global.error_num = 258;
 			return (0);
 		}
-		else if (tmp->token == 1 && !tmp->next)
+		else if (tmp->token == 1 && (!tmp->next || !tmp->prev))
 		{
 			ft_putstr_fd("pipe Error\n", 2);
 			g_global.error_num = 258;

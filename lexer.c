@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 19:05:28 by ohayek            #+#    #+#             */
-/*   Updated: 2023/08/03 19:25:15 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/04 19:37:50 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,10 @@ void	ft_init_lexer(t_global *mini, char *line)
 	i = 0;
 	while (lexers[i])
 	{
-		tokens = ft_split_tok(lexers[i], "|<>");
+		if (lexers[i][0] != '"' && lexers[i][0] != '\'')
+			tokens = ft_split_tok(lexers[i], "|<>");
+		else
+			tokens = ft_split(lexers[i], " ");
 		j = 0;
 		while (tokens[j])
 			ft_push_back(mini, tokens[j++]);
@@ -104,5 +107,4 @@ void	ft_init_lexer(t_global *mini, char *line)
 		i++;
 	}
 	free_tokens(lexers);
-
 }

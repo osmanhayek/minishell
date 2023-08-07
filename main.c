@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 18:52:25 by ohayek            #+#    #+#             */
-/*   Updated: 2023/08/03 18:45:58 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/07 05:19:01 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,14 @@ int	main(int ac, char **av, char **ev)
 
 	if (ac > 1)
 		exit(1);
+	mini.env = ev;
+	g_global.env = ev;
 	while (1)
 	{
 		line = readline("minishell$ ");
 		if (line == NULL)
 			exit(1);
+		add_history(line);
 		ft_init_lexer(&mini, line);
 		if (ft_check_error(&mini))
 		{
@@ -43,7 +46,8 @@ int	main(int ac, char **av, char **ev)
 			free(line);
 			continue ;
 		}
-		display(&mini);
+		ft_expand(&mini);
+		ft_init_parser(&mini);
 		free(line);
 	}
 }
