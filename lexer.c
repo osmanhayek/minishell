@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 19:05:28 by ohayek            #+#    #+#             */
-/*   Updated: 2023/08/04 19:37:50 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/11 22:43:10 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,18 @@
 
 int	ft_find_token(char *str)
 {
-	if (!ft_strncmp("|", str, 1))
+	if (!ft_strcmp("|", str))
 		return (1);
-	if (!ft_strncmp(">>", str, 2))
+	if (!ft_strcmp(">>", str))
 		return (3);
-	if (!ft_strncmp(">", str, 1))
+	if (!ft_strcmp(">", str))
 		return (2);
-	if (!ft_strncmp("<<", str, 2))
+	if (!ft_strcmp("<<", str))
 		return (5);
-	if (!ft_strncmp("<", str, 1))
+	if (!ft_strcmp("<", str))
 		return (4);
 	return (0);
 }
-
 
 void	ft_first_node(t_global *mini, char *str)
 {
@@ -35,8 +34,7 @@ void	ft_first_node(t_global *mini, char *str)
 		return ;
 	mini->head->next = NULL;
 	mini->head->prev = NULL;
-	if (ft_find_token(str))
-		mini->head->token = ft_find_token(str);
+	mini->head->token = ft_find_token(str);
 	mini->head->str = ft_strdup(str);
 	mini->head->i = 0;
 	if (str[0] == '"')
@@ -56,8 +54,7 @@ void	ft_last_node(t_global *mini, char *str)
 	if (!new)
 		return ;
 	new->next = NULL;
-	if (ft_find_token(str))
-		new->token = ft_find_token(str);
+	new->token = ft_find_token(str);
 	new->str = ft_strdup(str);
 	temp = mini->head;
 	while (temp->next)

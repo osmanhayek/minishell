@@ -6,22 +6,75 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 18:52:25 by ohayek            #+#    #+#             */
-/*   Updated: 2023/08/07 05:19:01 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/12 12:47:06 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	display(t_global *mini)
+void	close_heredoc(int sig)
 {
-	t_lexer	*temp;
+	(void)sig;
+	g_global.a = 1;
+	ioctl(STDIN_FILENO, TIOCSTI, "\n");
+	write(1, "\033[A", 3);
+}
 
-	temp = mini->head;
-	while (temp)
+void	ft_handler(int sig)
+{
+	if (g_global.test1)
 	{
-		printf("%d %s %d %d \n", temp->i, temp->str, temp->token, temp->is_quote);
-		temp = temp->next;
+		close_heredoc(sig);
+		return ;
 	}
+	else
+	{
+		if (g_global.test2)
+		{
+			ft_putstr_fd("\n", 2);
+			rl_on_new_line();
+			rl_replace_line("", 0);
+			return ;
+		}
+		ioctl(STDIN_FILENO, TIOCSTI, "\n");
+		write(1, "\033[A", 3);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+}
+
+void	minishell_loop(char *line,	t_global *mini)
+{
+	while (1)
+	{
+		g_global.test1 = 0;
+		g_global.a = 0;
+		g_global.test2 = 0;
+		line = readline("minishell$ ");
+		if (line == NULL)
+			exit(1);
+		if (line[0])
+			add_history(line);
+		ft_init_lexer(mini, line);
+		if (ft_check_error(mini))
+		{
+			ft_deallocate_lexer(mini);
+			free(line);
+			continue ;
+		}
+		ft_expand(mini);
+		ft_init_parser(mini);
+		ft_executer(mini);
+		ft_deallocate_all(mini);
+		free(line);
+	}
+}
+
+void	sigquit_handler(int sig)
+{
+	(void)sig;
+	return ;
 }
 
 int	main(int ac, char **av, char **ev)
@@ -31,23 +84,15 @@ int	main(int ac, char **av, char **ev)
 
 	if (ac > 1)
 		exit(1);
-	mini.env = ev;
+	line = NULL;
+	(void)av;
+	mini.env = ft_setenv(ev);
+	mini.export = ft_setenv(ev);
+	mini.head = NULL;
+	mini.p_head = NULL;
 	g_global.env = ev;
-	while (1)
-	{
-		line = readline("minishell$ ");
-		if (line == NULL)
-			exit(1);
-		add_history(line);
-		ft_init_lexer(&mini, line);
-		if (ft_check_error(&mini))
-		{
-			ft_deallocate_lexer(&mini);
-			free(line);
-			continue ;
-		}
-		ft_expand(&mini);
-		ft_init_parser(&mini);
-		free(line);
-	}
+	signal(SIGQUIT, sigquit_handler);
+	signal(SIGINT, ft_handler);
+	minishell_loop(line, &mini);
+	return (0);
 }

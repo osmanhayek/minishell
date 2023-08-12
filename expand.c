@@ -6,101 +6,69 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 17:22:03 by ohayek            #+#    #+#             */
-/*   Updated: 2023/08/06 18:54:15 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/12 11:26:09 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_replace_dolar(char *expanded_str, int *x, char *line, char **ev)
+int	ft_sad(char *str)
 {
-	char	*to_expand;
-	char	*to_search;
-	int		i;
-	int		j;
+	int	c;
+	int	i;
 
-	to_search = ft_strdup(line);
-	free(line);
-	line = ft_strjoin(to_search, "=");
-	free(to_search);
+	c = 1;
 	i = 0;
-	while (ev[i])
-	{
-		to_expand = ft_strnstr(ev[i], line, ft_strlen(line) + 1);
-		if (to_expand)
-		{
-			j = ft_strlen(line);
-			while (ev[i][j])
-				expanded_str[(*x)++] = ev[i][j++];
-			free(line);
-			return ;
-		}
-		i++;
-	}
-	free(line);
+	while (str[c] && ft_allvalid(str[c]))
+		c++;
+	return (c - 1);
 }
 
-void	ft_get_num(char *expanded_str, int *x)
+int	ft_sizeofexpanded(char *str, char **ev)
 {
-	char	*num;
-	int		c;
+	int	i;
+	int	c;
+	int	flag;
 
-	num = ft_itoa(g_global.error_num);
-	c = 0;
-	while (num[c])
-		expanded_str[(*x)++] = num[c++];
-	free(num);
+	ft_quicklyinitialize(&i, &flag, &c);
+	while (str[++i])
+	{
+		if (str[i] == '$' && flag != 1 && ft_ifvalid(str[i + 1]))
+		{
+			c += ft_add_dollar(str + i, ev);
+			i += ft_sad(str + i);
+		}
+		else if (ft_check_flag_status(str, i, &flag))
+			c++;
+	}
+	return (c);
 }
 
-void	process_dollar(char *line, char *expanded_str, int *x, int *i)
+char	*expander(char *str, char **ev)
 {
-	int		j;
+	char	*exp;
+	int		mem;
+	char	*mmm;
 
-	if (!ft_is_valid(line[*i + 1]) && line[*i + 1] != '?')
-	{
-		while (line[*i] && line[++(*i)] != '$')
-			expanded_str[(*x)++] = line[*i - 1];
-		if (line[*i] == '$' && !line[*i + 1])
-			expanded_str[(*x)++] = line[*i];
-	}
-	else
-	{
-		if (line[*i + 1] == '?')
-		{
-			ft_get_num(expanded_str, x);
-			*i += 2;
-			return ;
-		}
-		j = ++(*i);
-		while ((ft_is_valid(line[*i]) || ft_isalnum(line[*i])) && line[*i])
-			(*i)++;
-		ft_replace_dolar(expanded_str, x, ft_substr(line, j, *i - j), \
-		g_global.env);
-	}
+	mmm = ft_strdup(str);
+	mem = ft_sizeofexpanded(mmm, ev);
+	exp = malloc(mem + 2);
+	ft_expandmainly(&exp, str, ev);
+	free(mmm);
+	return (exp);
 }
 
-char	*ft_expand_str(char *line, char **ev)
+void	ft_check_delete(t_global *mini)
 {
-	int		size;
-	char	*expanded_str;
-	int		i;
-	int		x;
+	t_lexer	*temp;
 
-	size = ft_count(line, ev);
-	expanded_str = (char *)malloc(sizeof(char) * size + 1);
-	i = 0;
-	x = 0;
-	while (line[i])
+	temp = mini->head;
+	while (temp)
 	{
-		if (line[i] == '$')
-		{
-			process_dollar(line, expanded_str, &x, &i);
-			continue ;
-		}
-		expanded_str[x++] = line[i++];
+		if (!temp->str[0] && temp->is_quote == 0)
+			ft_delete_node(temp->i, mini);
+		temp = temp->next;
 	}
-	expanded_str[x] = '\0';
-	return (expanded_str);
 }
 
 void	ft_expand(t_global *mini)
@@ -113,15 +81,17 @@ void	ft_expand(t_global *mini)
 	{
 		if (temp->is_quote % 2 == 0)
 		{
-			to_expand = ft_strtrim(temp->str, "\"");
-			free(temp->str);
-			temp->str = ft_expand_str(to_expand, mini->env);
+			to_expand = ft_strdup(temp->str);
+			if (temp->str)
+				free(temp->str);
+			temp->str = expander(to_expand, mini->env);
 			free(to_expand);
 		}
 		else
 		{
-			to_expand = ft_strtrim(temp->str, "'");
-			free(temp->str);
+			to_expand = ft_strdup(temp->str);
+			if (temp->str)
+				free(temp->str);
 			temp->str = ft_strdup(to_expand);
 			free(to_expand);
 		}

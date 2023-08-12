@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baer <baer@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 04:35:54 by baer              #+#    #+#             */
-/*   Updated: 2023/08/07 04:37:02 by baer             ###   ########.fr       */
+/*   Updated: 2023/08/11 21:31:37 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	ft_init_parser(t_global *mini)
 		lexer = forward;
 	}
 	ft_init_matrix(mini);
-	//ft_init_builtin(mini);
+	ft_init_builtin(mini);
 }
 
 int	ft_pipesize(t_lexer *lexer)

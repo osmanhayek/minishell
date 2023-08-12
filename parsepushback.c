@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsepushback.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baer <baer@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/06 17:36:05 by baer              #+#    #+#             */
-/*   Updated: 2023/08/06 22:42:08 by baer             ###   ########.fr       */
+/*   Updated: 2023/08/11 16:29:42 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@ void	ft_parser_lexfirst_node(t_simple_cmds *temporary, char *str)
 		return ;
 	temporary->redirections->next = NULL;
 	temporary->redirections->prev = NULL;
-	if (ft_find_token(str))
-		temporary->redirections->token = ft_find_token(str);
+	temporary->redirections->token = ft_find_token(str);
 	temporary->redirections->str = ft_strdup(str);
 	temporary->redirections->i = 0;
 	if (str[0] == '"')
@@ -40,8 +39,7 @@ void	ft_parser_lexlast_node(t_simple_cmds *temporary, char *str)
 	if (!new)
 		return ;
 	new->next = NULL;
-	if (ft_find_token(str))
-		new->token = ft_find_token(str);
+	new->token = ft_find_token(str);
 	new->str = ft_strdup(str);
 	temp = temporary->redirections;
 	while (temp->next)

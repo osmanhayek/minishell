@@ -6,7 +6,7 @@
 #    By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/01 16:09:17 by ohayek            #+#    #+#              #
-#    Updated: 2023/07/03 15:27:52 by ohayek           ###   ########.fr        #
+#    Updated: 2023/08/12 10:31:37 by ohayek           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,7 +50,8 @@ SRCS	= ft_isalpha.c \
 		  ft_putchar_fd.c \
 		  ft_putstr_fd.c \
 		  ft_putendl_fd.c \
-		  ft_putnbr_fd.c 
+		  ft_putnbr_fd.c \
+		  ft_split_utils.c
 
 BSRCS	= ft_lstnew.c \
 		  ft_lstadd_front.c \

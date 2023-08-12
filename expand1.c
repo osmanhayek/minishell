@@ -5,115 +5,113 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/06 17:37:06 by ohayek            #+#    #+#             */
-/*   Updated: 2023/08/06 18:21:04 by ohayek           ###   ########.fr       */
+/*   Created: 2023/08/12 11:12:03 by ohayek            #+#    #+#             */
+/*   Updated: 2023/08/12 12:15:39 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_expand_count(char *line, char **ev)
+int	ft_replace_dollar(char **exp, int *j, char *str, char **ev)
 {
+	int		c;
 	int		i;
-	int		size;
-	char	*to_expand;
-	char	*to_search;
+	char	*path;
+	char	*save;
 
+	c = 1;
 	i = 0;
-	to_search = ft_strdup(line);
-	free(line);
-	line = ft_strjoin(to_search, "=");
-	free(to_search);
-	while (ev[i])
+	if (str[i + 1] == '?')
+		return (ft_handle_qmark(exp, j));
+	while (str[c] && ft_allvalid(str[c]))
+		c++;
+	save = ft_substr(str, 1, c - 1);
+	path = ft_pathof(save, ev);
+	if (path[0])
 	{
-		to_expand = ft_strnstr(ev[i], line, ft_strlen(line) + 1);
-		if (to_expand)
-		{
-			size = ft_strlen(to_expand + ft_strlen(line));
-			free(line);
-			return (size);
-		}
-		i++;
+		ft_stradd(exp, path + ft_strlen(save) + 1, *j);
+		*j += ft_strlen(path + ft_strlen(save) + 1);
 	}
-	free(line);
+	free(save);
+	return (c - 1);
+}
+
+int	ft_check_flag_status(char *str, int i, int *flag)
+{
+	if (*flag == 2 && str[i] == '\"')
+	{
+		*flag = 0;
+		return (0);
+	}
+	else if (*flag == 1 && str[i] == '\'')
+	{
+		*flag = 0;
+		return (0);
+	}
+	else if (*flag == 0 && str[i] == '\'')
+	{
+		*flag = 1;
+		return (0);
+	}
+	else if (*flag == 0 && str[i] == '\"')
+	{
+		*flag = 2;
+		return (0);
+	}
+	return (1);
+}
+
+int	ft_ifvalid(char c)
+{
+	if (c == '_' || ft_isalpha(c) || c == '?')
+		return (1);
 	return (0);
 }
 
-int	ft_num(int num)
-{
-	int		size;
-	long	nbr;
-
-	size = 0;
-	if (!num)
-		return (1);
-	nbr = num;
-	if (nbr < 0)
-	{
-		size++;
-		nbr = -nbr;
-	}
-	while (nbr)
-	{
-		size++;
-		nbr = nbr / 10;
-	}
-	return (size);
-}
-
-void	ft_set_when_nvalid(char *line, int *i, int *size)
-{
-	if (!ft_is_valid(line[*i + 1]) && line[*i + 1] != '?')
-	{
-		while (line[*i] && line[++*i] != '$')
-			size++;
-		if (line[*i] == '$' && !line[*i + 1])
-			size++;
-	}
-}
-
-void	ft_set_when_valid(char *line, int *i, int *j, int *size)
-{
-	if (line[*i + 1] == '?')
-	{
-		*i = *i + 1;
-		*size += ft_num(g_global.error_num);
-	}
-	else
-	{
-		*j = ++*i;
-		while ((ft_is_valid(line[*i]) || ft_isalnum(line[*i])) && \
-		line[*i])
-			*i = *i + 1;
-		*size += ft_expand_count(ft_substr(line, *j, *i - *j), g_global.env);
-	}
-}
-
-int	ft_count(char *line, char **ev)
+void	ft_expandmainly(char **exp, char *str, char **ev)
 {
 	int	i;
-	int	size;
 	int	j;
+	int	flag;
 
-	i = 0;
-	size = 0;
-	while (line[i])
+	ft_quicklyinitialize(&i, &flag, &j);
+	while (str[++i])
 	{
-		if (line[i] == '$')
+		if (str[i] == '$' && flag != 1 && ft_ifvalid(str[i + 1]))
+			i += ft_replace_dollar(exp, &j, str + i, ev);
+		else if (ft_check_flag_status(str, i, &flag))
 		{
-			if (!ft_is_valid(line[i + 1]) && line[i + 1] != '?')
-			{
-				ft_set_when_nvalid(line, &i, &size);
-				continue ;
-			}
-			else
-			{
-				ft_set_when_valid(line, &i, &j, &size);
-				continue ;
-			}
+			(*exp)[j] = str[i];
+			j++;
 		}
-		size++;
-		i++;
+		(*exp)[j] = '\0';
 	}
-	return (size);
+	(*exp)[j] = str[i];
+}
+
+int	ft_add_dollar(char *str, char **ev)
+{
+	int		c;
+	int		i;
+	int		j;
+	char	*path;
+	char	*save;
+
+	c = 1;
+	i = 0;
+	if (str[1] == '?')
+	{
+		save = ft_itoa(g_global.error_num);
+		j = ft_strlen(save);
+		free(save);
+		return (j);
+	}
+	while (str[c] && ft_allvalid(str[c]))
+		c++;
+	save = ft_substr(str, 1, c - 1);
+	path = ft_strdup(ft_pathof(save, ev));
+	j = ft_strlen(path + ft_strlen(save) + 1);
+	free(save);
+	free(path);
+	return (j);
 }
