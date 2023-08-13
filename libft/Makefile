@@ -6,14 +6,14 @@
 #    By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/01 16:09:17 by ohayek            #+#    #+#              #
-#    Updated: 2023/08/12 10:31:37 by ohayek           ###   ########.fr        #
+#    Updated: 2023/08/14 00:32:28 by ohayek           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= libft.a
 CC		= gcc
 INC		= libft.h
-CFLAGS	= -Wall -Wextra -Werror
+CFLAGS	= -Wall -Wextra -Werror -g
 ARFLAGS	= -rcs
 RM		= rm -rf
 
@@ -51,7 +51,6 @@ SRCS	= ft_isalpha.c \
 		  ft_putstr_fd.c \
 		  ft_putendl_fd.c \
 		  ft_putnbr_fd.c \
-		  ft_split_utils.c
 
 BSRCS	= ft_lstnew.c \
 		  ft_lstadd_front.c \

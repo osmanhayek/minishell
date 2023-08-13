@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/06 17:05:12 by baer              #+#    #+#             */
-/*   Updated: 2023/08/11 21:31:46 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/12 22:42:56 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 void	ft_parser_firstnode(t_global *mini, t_lexer *lexer)
 {
 	t_simple_cmds	*new;
-	t_lexer			*save;
+	//t_lexer			*save;
 	int				i;
 
 	ft_skipinit(&new, 0);
 	new->prev = NULL;
-	save = lexer;
+	//save = lexer;
 	while (lexer && lexer->token != PIPE)
 	{
 		if (lexer->token)

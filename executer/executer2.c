@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 21:14:35 by ohayek            #+#    #+#             */
-/*   Updated: 2023/08/12 03:23:31 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/12 23:24:40 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	ft_set_heredoc(t_lexer *temp)
 				close(g_global.in_her);
 				g_global.in_her = 0;
 			}
-			g_global.in_her = ft_her(temp, "/Users/ohayek/single_temp.txt");
+			g_global.in_her = ft_her(temp, "single_temp.txt");
 			if (g_global.in_her == -1)
 				return ;
 		}

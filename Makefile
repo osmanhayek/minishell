@@ -1,7 +1,7 @@
 NAME        := minishell
-CC        := gcc
+CC        := clang
 
-FLAGS    := -Wall -Wextra -Werror
+FLAGS    := -Wall -Wextra -Werror -fcommon -g
 LIBFT	 := libft/libft.a
 #FLAGS       := -fsanitize=address -g
 # FLAGS := -g

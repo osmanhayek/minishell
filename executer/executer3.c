@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 21:15:24 by ohayek            #+#    #+#             */
-/*   Updated: 2023/08/12 04:58:58 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/12 23:32:38 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,15 +64,20 @@ int	ft_her(t_lexer *temp, char *file)
 	{
 		if (ft_wait(fd, &line) == -1)
 			return (-1);
+		if (line == NULL)
+		{
+			close(fd);
+			return (open(file, O_RDONLY));
+		}
 		if (!ft_strcmp(line, delimiter))
 		{
 			free(line);
 			break ;
 		}
-		free(line);
 		temp_str = ft_strjoin(line, "\n");
 		write(fd, temp_str, ft_strlen(temp_str));
 		free(temp_str);
+		free(line);
 	}
 	close(fd);
 	return (open(file, O_RDONLY));

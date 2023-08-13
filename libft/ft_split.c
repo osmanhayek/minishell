@@ -11,54 +11,71 @@
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <string.h>
 
-static	char	*ft_strndup(char *prev, char *next)
+int is_space_or_tab(char c)
 {
-	char	*arr;
-	char	*temp;
-
-	arr = (char *)malloc(sizeof(char) * (next - prev + 1));
-	temp = arr;
-	while (prev < next)
-		*arr++ = *prev++;
-	*arr = '\0';
-	return (temp);
+    return c == ' ' || c == '\t';
 }
 
-char	*ft_skipnext(char *next, char *c)
+char **ft_split(const char *s, char *c)
 {
-	if (*next == '"' || *next == '\'')
-	{
-		next++;
-		ft_quotemove(&next);
-		next++;
-	}
-	else
-		next = move(next, c);
-	return (next);
-}
+    char **arr = NULL;
+    int arr_size = 0;
 
-char	**ft_split(const char *s, char *c)
-{
-	char	**arr;
-	char	*next;
-	char	*prev;
-	int		i;
+    while (*s)
+    {
+        // Skip leading spaces and tabs
+        while (is_space_or_tab(*s) && *s)
+            s++;
 
-	arr = (char **)malloc(sizeof(char *) * count_split((char *)s, c, 0));
-	if (!arr)
-		return (0);
-	arr[count_split((char *)s, c, 0) - 1] = NULL;
-	i = 0;
-	next = pass((char *)s, c);
-	prev = next;
-	while (i < count_split((char *)s, c, 0) - 1)
-	{
-		next = ft_skipnext(next, c);
-		arr[i++] = ft_strndup(prev, next);
-		next = pass(next, c);
-		prev = next - 1;
-		prev++;
-	}
-	return (arr);
+        if (*s == '\0')
+            break;
+
+        const char *start = s;
+        int in_quote = 0;
+
+        while (*s)
+        {
+            if (*s == '"' || *s == '\'')
+            {
+                if (!in_quote)
+                {
+                    in_quote = *s;
+                }
+                else if (in_quote == *s)
+                {
+                    in_quote = 0;
+                }
+            }
+            else if (in_quote)
+            {
+                // Inside a quote, just continue
+            }
+            else if (is_space_or_tab(*s) || strchr(c, *s))
+            {
+                break;  // Delimiter found
+            }
+            s++;
+        }
+
+        int length = s - start;
+        if (length > 0)
+        {
+            arr = realloc(arr, (arr_size + 1) * sizeof(char *));
+            arr[arr_size] = malloc(length + 1);
+            strncpy(arr[arr_size], start, length);
+            arr[arr_size][length] = '\0';
+            arr_size++;
+        }
+
+        // Skip delimiters
+        while (*s && (is_space_or_tab(*s) || strchr(c, *s)))
+            s++;
+    }
+
+    arr = realloc(arr, (arr_size + 1) * sizeof(char *));
+    arr[arr_size] = NULL;
+
+    return arr;
 }

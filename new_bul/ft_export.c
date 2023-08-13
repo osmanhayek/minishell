@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 18:25:28 by baer              #+#    #+#             */
-/*   Updated: 2023/08/12 11:34:05 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/12 22:55:44 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,5 +111,7 @@ int	ft_export(t_global *mini, t_simple_cmds *parser)
 		i++;
 		free(quoted);
 	}
+	if (flag)
+		return (1);
 	return (0);
 }

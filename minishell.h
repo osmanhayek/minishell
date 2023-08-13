@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 19:02:01 by ohayek            #+#    #+#             */
-/*   Updated: 2023/08/12 12:45:13 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/14 01:07:13 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 #include <errno.h>
 #include "libft/libft.h"
 #include <fcntl.h>
+#include <dirent.h>
 
 typedef enum e_tokens
 {
@@ -94,7 +95,7 @@ void	ft_delete_node(int index, t_global *mini);
 void	ft_skipinit(t_simple_cmds **new, int flag);
 void	ft_parser_pushback(t_global *mini, t_lexer *lexer);
 void	ft_parent(t_global *mini);
-void	ft_check_delete(t_global *mini);
+void	ft_check_delete(t_global *mini, t_lexer *temp);
 void	ft_expand(t_global *mini);
 void	ft_deallocate_all(t_global *mini);
 void	ft_init_builtin(t_global *mini);

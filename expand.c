@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 17:22:03 by ohayek            #+#    #+#             */
-/*   Updated: 2023/08/12 11:26:09 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/13 01:35:24 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,8 @@
 int	ft_sad(char *str)
 {
 	int	c;
-	int	i;
 
 	c = 1;
-	i = 0;
 	while (str[c] && ft_allvalid(str[c]))
 		c++;
 	return (c - 1);
@@ -52,17 +50,14 @@ char	*expander(char *str, char **ev)
 
 	mmm = ft_strdup(str);
 	mem = ft_sizeofexpanded(mmm, ev);
-	exp = malloc(mem + 2);
+	exp = ft_calloc(mem + 2, sizeof(char));
 	ft_expandmainly(&exp, str, ev);
 	free(mmm);
 	return (exp);
 }
 
-void	ft_check_delete(t_global *mini)
+void	ft_check_delete(t_global *mini, t_lexer *temp)
 {
-	t_lexer	*temp;
-
-	temp = mini->head;
 	while (temp)
 	{
 		if (!temp->str[0] && temp->is_quote == 0)
@@ -79,23 +74,12 @@ void	ft_expand(t_global *mini)
 	temp = mini->head;
 	while (temp)
 	{
-		if (temp->is_quote % 2 == 0)
-		{
-			to_expand = ft_strdup(temp->str);
-			if (temp->str)
-				free(temp->str);
-			temp->str = expander(to_expand, mini->env);
-			free(to_expand);
-		}
-		else
-		{
-			to_expand = ft_strdup(temp->str);
-			if (temp->str)
-				free(temp->str);
-			temp->str = ft_strdup(to_expand);
-			free(to_expand);
-		}
+		to_expand = ft_strdup(temp->str);
+		if (temp->str)
+			free(temp->str);
+		temp->str = expander(to_expand, mini->env);
+		free(to_expand);
 		temp = temp->next;
 	}
-	ft_check_delete(mini);
+	ft_check_delete(mini ,mini->head);
 }

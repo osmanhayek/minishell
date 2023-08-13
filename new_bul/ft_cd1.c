@@ -6,11 +6,11 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 06:16:06 by ohayek            #+#    #+#             */
-/*   Updated: 2023/08/12 11:32:55 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/12 22:45:06 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 char	*ft_find_path(char **ev, char *str)
 {

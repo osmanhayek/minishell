@@ -6,11 +6,11 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 06:44:05 by ohayek            #+#    #+#             */
-/*   Updated: 2023/08/12 11:00:53 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/12 23:21:04 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 void	ft_parent(t_global *mini)
 {

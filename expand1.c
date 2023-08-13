@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 11:12:03 by ohayek            #+#    #+#             */
-/*   Updated: 2023/08/12 12:15:39 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/13 01:09:32 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ int	ft_replace_dollar(char **exp, int *j, char *str, char **ev)
 {
 	int		c;
 	int		i;
-	char	*path;
-	char	*save;
+	char	*path = NULL;
+	char	*save = NULL;
 
 	c = 1;
 	i = 0;
@@ -32,6 +32,7 @@ int	ft_replace_dollar(char **exp, int *j, char *str, char **ev)
 		ft_stradd(exp, path + ft_strlen(save) + 1, *j);
 		*j += ft_strlen(path + ft_strlen(save) + 1);
 	}
+	free(path);
 	free(save);
 	return (c - 1);
 }
@@ -92,13 +93,12 @@ void	ft_expandmainly(char **exp, char *str, char **ev)
 int	ft_add_dollar(char *str, char **ev)
 {
 	int		c;
-	int		i;
 	int		j;
 	char	*path;
 	char	*save;
+	char	*bruh;
 
 	c = 1;
-	i = 0;
 	if (str[1] == '?')
 	{
 		save = ft_itoa(g_global.error_num);
@@ -109,9 +109,11 @@ int	ft_add_dollar(char *str, char **ev)
 	while (str[c] && ft_allvalid(str[c]))
 		c++;
 	save = ft_substr(str, 1, c - 1);
-	path = ft_strdup(ft_pathof(save, ev));
+	bruh = ft_pathof(save, ev);
+	path = ft_strdup(bruh);
 	j = ft_strlen(path + ft_strlen(save) + 1);
 	free(save);
 	free(path);
+	free(bruh);
 	return (j);
 }

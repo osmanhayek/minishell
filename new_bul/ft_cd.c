@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 18:25:30 by baer              #+#    #+#             */
-/*   Updated: 2023/08/12 12:52:42 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/14 00:58:28 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,5 +79,10 @@ int	ft_cd(t_global *mini, t_simple_cmds *parser)
 	int	ret;
 
 	ret = 0;
+	if (parser->str[1] && parser->str[2])
+	{
+		ft_putstr_fd("cd: too many arguments\n", 2);
+		return (1);
+	}
 	return (ft_cdskip(mini, parser, ret));
 }

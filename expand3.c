@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 11:17:41 by ohayek            #+#    #+#             */
-/*   Updated: 2023/08/12 11:17:52 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/13 01:34:24 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	*ft_pathof(char *str, char **ev)
 		if (!ft_strncmp(ev[i], path, ft_strlen(path)))
 		{
 			free(path);
-			return (ev[i]);
+			return (ft_strdup(ev[i]));
 		}
 		i++;
 	}
