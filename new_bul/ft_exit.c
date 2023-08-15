@@ -6,16 +6,16 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 17:53:02 by baer              #+#    #+#             */
-/*   Updated: 2023/08/14 01:41:30 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/15 22:52:58 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-long long ft_atol(char *nptr)
+long long	ft_atol(char *nptr)
 {
 	long long	result;
-	int		a;
+	int			a;
 
 	while (*nptr == '\n' || *nptr == '\t' || *nptr == '\r' \
 	|| *nptr == '\v' || *nptr == '\f' || *nptr == ' ')

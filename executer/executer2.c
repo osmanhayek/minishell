@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 21:14:35 by ohayek            #+#    #+#             */
-/*   Updated: 2023/08/12 23:24:40 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/15 17:09:43 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,16 +59,19 @@ int	ft_set_append(t_lexer *temp)
 		close(g_global.out_red);
 		g_global.out_red = 0;
 	}
-	if (ft_search_slash(temp->next->str))
+	if (!temp->next->str[0])
 	{
-		if (!access(temp->next->str, F_OK))
+		ft_putstr_fd("bash: No such file or directory\n", 2);
+		g_global.out_red = 0;
+		return (-1);
+	}
+	if (!access(temp->next->str, F_OK))
+	{
+		if (access(temp->next->str, W_OK))
 		{
-			if (access(temp->next->str, W_OK))
-			{
-				ft_putstr_fd("bash: Premision denied\n", 2);
-				g_global.out_red = 0;
-				return (-1);
-			}
+			ft_putstr_fd("bash: Premision denied\n", 2);
+			g_global.out_red = 0;
+			return (-1);
 		}
 	}
 	g_global.out_red = open(temp->next->str, O_WRONLY | O_CREAT | O_APPEND, \
@@ -83,16 +86,19 @@ int	ft_set_great(t_lexer *temp)
 		close(g_global.out_red);
 		g_global.out_red = 0;
 	}
-	if (ft_search_slash(temp->next->str))
+	if (!temp->next->str[0])
 	{
-		if (!access(temp->next->str, F_OK))
+		ft_putstr_fd("bash: No such file or directory\n", 2);
+		g_global.out_red = 0;
+		return (-1);
+	}
+	if (!access(temp->next->str, F_OK))
+	{
+		if (access(temp->next->str, W_OK))
 		{
-			if (access(temp->next->str, W_OK))
-			{
-				ft_putstr_fd("bash: Premision denied\n", 2);
-				g_global.out_red = 0;
-				return (-1);
-			}
+			ft_putstr_fd("bash: Premision denied\n", 2);
+			g_global.out_red = 0;
+			return (-1);
 		}
 	}
 	g_global.out_red = open(temp->next->str, O_WRONLY | O_CREAT | O_TRUNC, \

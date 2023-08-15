@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 11:12:03 by ohayek            #+#    #+#             */
-/*   Updated: 2023/08/13 01:09:32 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/15 22:49:20 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ int	ft_replace_dollar(char **exp, int *j, char *str, char **ev)
 {
 	int		c;
 	int		i;
-	char	*path = NULL;
-	char	*save = NULL;
+	char	*path;
+	char	*save;
 
 	c = 1;
 	i = 0;

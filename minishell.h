@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 19:02:01 by ohayek            #+#    #+#             */
-/*   Updated: 2023/08/14 01:07:13 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/14 02:23:09 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include "libft/libft.h"
+#include "get_next_line/get_next_line.h"
 #include <fcntl.h>
 #include <dirent.h>
 
@@ -137,6 +138,7 @@ int		ft_export(t_global *mini, t_simple_cmds *parser);
 int		ft_unset(t_global *mini, t_simple_cmds *parser);
 int		ft_env(t_global *mini, struct s_simple_cmds *head);
 int		ft_exit(t_global *mini, struct s_simple_cmds *parser);
+int		ft_check_slash(char *str);
 int		ft_strcmp(char *s1, char *s2);
 int		ft_size_cmds(t_global *mini);
 int		ft_search_slash(char *str);

@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 17:22:03 by ohayek            #+#    #+#             */
-/*   Updated: 2023/08/13 01:35:24 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/15 22:48:53 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,5 +81,5 @@ void	ft_expand(t_global *mini)
 		free(to_expand);
 		temp = temp->next;
 	}
-	ft_check_delete(mini ,mini->head);
+	ft_check_delete(mini, mini->head);
 }

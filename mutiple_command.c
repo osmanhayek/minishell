@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 21:52:17 by ohayek            #+#    #+#             */
-/*   Updated: 2023/08/12 13:06:04 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/15 17:21:00 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ void	ft_set_red_multi(t_global *mini, t_simple_cmds *temp, int has_slash)
 void	ft_fork_multi(t_global *mini, t_simple_cmds *temp, int *has_slash, \
 int i)
 {
+	int	status;
+
 	*has_slash = ft_search_slash(temp->str[0]);
 	temp->prcs.pid = fork();
 	if (temp->prcs.pid == 0)
@@ -48,13 +50,22 @@ int i)
 		ft_set_pipes(mini, temp, i);
 		if (temp->redirections)
 			ft_set_red_multi(mini, temp, *has_slash);
-		else if (!*has_slash && !temp->builtin)
+		else if (!*has_slash && !temp->builtin && temp->str[0][0])
 			if (ft_check_replace(temp, mini) == -1)
 				exit(127);
+		if (*has_slash)
+		{
+			status = ft_check_slash(temp->str[0]);
+			if (status)
+				exit(status);
+		}
 		if (temp->builtin)
 			exit(temp->builtin(mini, temp));
-		if (!temp->str[0])
-			exit(0);
+		if (!temp->str[0][0])
+		{
+			ft_putstr_fd("bash: Command not found\n", 2);
+			exit(127);
+		}
 		execve(temp->str[0], temp->str, mini->env);
 		perror("bash: ");
 		exit(EXIT_FAILURE);

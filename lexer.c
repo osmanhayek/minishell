@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 19:05:28 by ohayek            #+#    #+#             */
-/*   Updated: 2023/08/11 22:43:10 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/14 23:46:21 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,46 @@ void	ft_push_back(t_global *mini, char *str)
 	ft_last_node(mini, str);
 }
 
+int	ft_quote(char *line)
+{
+	int	flag;
+	int	i;
+
+	i = 0;
+	flag = 0;
+	while (line[i])
+	{
+		if (line[i] == '"')
+		{
+			flag = 1;
+			while (line[++i] && flag == 1)
+			{
+				if (line[i] == '"')
+					flag = 0;
+				if (line[i] == '|' || line[i] == '>' \
+				|| line[i] == '<')
+					flag = 0;
+			}
+			continue ;
+		}
+		else if (line[i] == '\'')
+		{
+			flag = 1;
+			while (line[++i] && flag == 1)
+			{
+				if (line[i] == '\'')
+					flag = 0;
+				if (line[i] == '|' || line[i] == '>' \
+				|| line[i] == '<')
+					flag = 0;
+			}
+			continue ;
+		}
+		i++;
+	}
+	return (flag);
+}
+
 void	ft_init_lexer(t_global *mini, char *line)
 {
 	char	**lexers;
@@ -93,7 +133,7 @@ void	ft_init_lexer(t_global *mini, char *line)
 	i = 0;
 	while (lexers[i])
 	{
-		if (lexers[i][0] != '"' && lexers[i][0] != '\'')
+		if (!ft_quote(lexers[i]))
 			tokens = ft_split_tok(lexers[i], "|<>");
 		else
 			tokens = ft_split(lexers[i], " ");

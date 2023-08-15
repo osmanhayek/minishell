@@ -6,32 +6,31 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 23:04:41 by ohayek            #+#    #+#             */
-/*   Updated: 2023/08/14 01:13:47 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/15 22:47:28 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_check_directory(t_global *mini)
+int	ft_check_directory(char *str)
 {
-	DIR *dir;
+	DIR	*dir;
 
-	dir = opendir(mini->p_head->str[0]);
+	dir = opendir(str);
 	if (!dir)
 		return (0);
 	closedir(dir);
 	return (1);
 }
 
-int	ft_check_slash(t_global *mini)
+int	ft_check_slash(char *str)
 {
-	// if not exist and if its directory
-	if (access(mini->p_head->str[0], F_OK))
+	if (access(str, F_OK))
 	{
 		ft_putstr_fd("minishell: No such file or directory\n", 2);
 		return (127);
 	}
-	if (ft_check_directory(mini))
+	if (ft_check_directory(str))
 	{
 		ft_putstr_fd("minishell: Is a directory\n", 2);
 		return (126);
@@ -43,19 +42,26 @@ void	ft_set_when_no_red(t_global *mini, int has_slash)
 {
 	int	status;
 
-	if (!has_slash && !mini->p_head->builtin)
+	if (!has_slash && !mini->p_head->builtin && mini->p_head->str[0][0])
 		if (ft_check_replace(mini->p_head, mini) == -1)
 			exit(127);
 	if (has_slash)
 	{
-		status = ft_check_slash(mini);
+		status = ft_check_slash(mini->p_head->str[0]);
 		if (status)
 			exit(status);
 	}
 	if (mini->p_head->builtin)
 		exit(mini->p_head->builtin(mini, mini->p_head));
+	if (mini->p_head->str[0][0] == '\0')
+	{
+		ft_putstr_fd("bash: Command not found\n", 2);
+		exit(127);
+	}
 	execve(mini->p_head->str[0], mini->p_head->str, mini->env);
 	perror("bash: ");
+	if (errno == 13)
+		exit(126);
 	exit(1);
 }
 
@@ -71,6 +77,8 @@ void	ft_wait_single(pid_t pid, int *wait_status)
 	waitpid(pid, wait_status, 0);
 	if (WIFEXITED(*wait_status))
 		g_global.error_num = WEXITSTATUS(*wait_status);
+	else if (WIFSIGNALED(*wait_status))
+		g_global.error_num = 128 + WTERMSIG(*wait_status);
 }
 
 void	ft_single_command(t_global *mini)

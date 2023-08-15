@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 18:25:37 by baer              #+#    #+#             */
-/*   Updated: 2023/08/12 22:59:31 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/15 22:42:38 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,6 @@ int	ft_unset_errors(t_global *mini, t_simple_cmds *parser)
 
 	(void)mini;
 	i = 0;
-	if (!parser->str[1])
-	{
-		write(2, "minishell: unset: not enough arguments\n", 39);
-		return (1);
-	}
 	while (parser->str[i])
 	{
 		if (parser->str[1][i++] == '/')
@@ -60,26 +55,50 @@ char	**ft_setenvminus(char **ev, int j)
 	return (arr);
 }
 
+int	ft_toequal(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '=')
+			return (i);
+		i++;
+	}
+	return (i);
+}
+
 void	ft_delvar(t_global *mini, char *str)
 {
-	//int		i;
 	int		j;
+	char	**env;
+	char	**ex;
 
-	//i = 0;
 	j = 0;
-	while (mini->env[j])
+	env = ft_setenv(mini->env);
+	ex = ft_setenv(mini->env);
+	while (env[j])
 	{
-		if (!ft_strncmp(mini->env[j], str, ft_ifequalexists(str) + 1))
-			mini->env = ft_setenvminus(mini->env, j--);
+		if (!ft_strncmp(env[j], str, ft_toequal(str)))
+		{
+			free_tokens(mini->env);
+			mini->env = ft_setenvminus(env, j);
+		}
 		j++;
 	}
 	j = 0;
-	while (mini->export[j])
+	while (ex[j])
 	{
-		if (!ft_strncmp(mini->export[j], str, ft_ifequalexists(str) + 1))
-			mini->export = ft_setenvminus(mini->export, j--);
+		if (!ft_strncmp(ex[j], str, ft_toequal(str)))
+		{
+			free_tokens(mini->export);
+			mini->export = ft_setenvminus(ex, j);
+		}
 		j++;
 	}
+	free_tokens(ex);
+	free_tokens(env);
 }
 
 int	ft_unset(t_global *mini, t_simple_cmds *parser)
