@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 06:44:05 by ohayek            #+#    #+#             */
-/*   Updated: 2023/08/12 23:21:04 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/17 22:40:56 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@ void	ft_parent(t_global *mini)
 	{
 		ft_set_heredoc(mini->p_head->redirections);
 		if (g_global.in_her == -1)
+		{
+			g_global.error_num = 130;
 			return ;
+		}
 		if (ft_set_red(mini->p_head->redirections) == -1)
 		{
 			g_global.error_num = 1;

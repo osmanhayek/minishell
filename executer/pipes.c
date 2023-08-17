@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 22:32:28 by ohayek            #+#    #+#             */
-/*   Updated: 2023/08/13 00:29:28 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/17 22:04:55 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ void	set_heredoc_for_multi(t_global *mini)
 				{
 					if (temp->in_her)
 						close(temp->in_her);
+					// bunu degistir UNUTMA!!!
 					temp->in_her = ft_her(red, "simple_temp.txt");
 					if (temp->in_her == -1)
 						return ;

@@ -37,8 +37,6 @@ SRCS        :=         	  main.c \
 						  split_token.c \
 						  split_token2.c \
 						  split_token3.c \
-                          get_next_line/get_next_line.c \
-                          get_next_line/get_next_line_utils.c
                           
 OBJS        := $(SRCS:.c=.o)
 

@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 18:25:37 by baer              #+#    #+#             */
-/*   Updated: 2023/08/15 22:42:38 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/17 22:53:23 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	ft_delvar(t_global *mini, char *str)
 	ex = ft_setenv(mini->env);
 	while (env[j])
 	{
-		if (!ft_strncmp(env[j], str, ft_toequal(str)))
+		if (!ft_strncmp(env[j], str, ft_toequal(env[j])))
 		{
 			free_tokens(mini->env);
 			mini->env = ft_setenvminus(env, j);
@@ -90,7 +90,7 @@ void	ft_delvar(t_global *mini, char *str)
 	j = 0;
 	while (ex[j])
 	{
-		if (!ft_strncmp(ex[j], str, ft_toequal(str)))
+		if (!ft_strncmp(ex[j], str, ft_toequal(env[j])))
 		{
 			free_tokens(mini->export);
 			mini->export = ft_setenvminus(ex, j);

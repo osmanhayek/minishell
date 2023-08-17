@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 21:13:51 by ohayek            #+#    #+#             */
-/*   Updated: 2023/08/14 12:05:18 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/17 22:25:40 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void	ft_set_global(t_global *mini)
 		dup2(g_global.out_red, 1);
 	if (mini->p_head->builtin)
 		exit(mini->p_head->builtin(mini, mini->p_head));
-	if (!mini->p_head->str[0][0])
+	if (!mini->p_head->str[0] || !mini->p_head->str[0][0])
 		exit(0);
 	execve(mini->p_head->str[0], mini->p_head->str, mini->env);
 	perror("bash: ");

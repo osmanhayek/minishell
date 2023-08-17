@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 21:52:17 by ohayek            #+#    #+#             */
-/*   Updated: 2023/08/15 17:21:00 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/17 22:08:37 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int i)
 		else if (!*has_slash && !temp->builtin && temp->str[0][0])
 			if (ft_check_replace(temp, mini) == -1)
 				exit(127);
-		if (*has_slash)
+		if (*has_slash && temp->str[0])
 		{
 			status = ft_check_slash(temp->str[0]);
 			if (status)

@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 23:04:41 by ohayek            #+#    #+#             */
-/*   Updated: 2023/08/15 22:47:28 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/08/17 22:38:18 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,9 @@ void	ft_single_command(t_global *mini)
 			if (mini->p_head->redirections)
 			{
 				ft_check_red(mini, has_slash);
+				//suna bak bi
 				if (g_global.in_her == -1)
-					exit(1);
+					exit(130);
 			}
 			else
 				ft_set_when_no_red(mini, has_slash);
